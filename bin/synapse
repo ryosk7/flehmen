@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+
+app_path = ENV["RAILS_APP_PATH"] || Dir.pwd
+ENV["RAILS_ENV"] ||= "development"
+
+require File.join(app_path, "config", "environment")
+Rails.application.eager_load!
+
+require "synapse"
+
+Synapse.boot!
+Synapse.start_server!
