@@ -4,14 +4,14 @@ require "json"
 
 module Flehmen
   module Tools
-    class ExecuteQueryTool < FastMcp::Tool
+    class ExecuteQueryTool < Base
       tool_name "flehmen_execute_query"
       description "Execute a read-only SQL SELECT query. Only available if enabled in configuration. Only SELECT statements are allowed."
 
       FORBIDDEN_KEYWORDS = %w[
         INSERT UPDATE DELETE DROP ALTER CREATE TRUNCATE
         GRANT REVOKE REPLACE MERGE CALL EXEC EXECUTE
-        SET LOCK UNLOCK
+        SET LOCK UNLOCK INTO LOAD COPY PRAGMA
       ].freeze
 
       arguments do
@@ -24,7 +24,7 @@ module Flehmen
         open_world_hint: false
       )
 
-      def call(sql:, limit: nil)
+      def execute(sql:, limit: nil)
         unless Flehmen.configuration.enable_raw_sql
           return JSON.generate({ error: "Raw SQL execution is disabled. Set config.enable_raw_sql = true to enable." })
         end
@@ -42,7 +42,9 @@ module Flehmen
         max = Flehmen.configuration.max_results
         effective_limit = limit ? [limit.to_i, max].min : max
 
-        unless normalized.match?(/\bLIMIT\b/i)
+        if normalized.match?(/\bLIMIT\b/i)
+          normalized = normalized.gsub(/\bLIMIT\s+\d+/i, "LIMIT #{effective_limit}")
+        else
           normalized = "#{normalized} LIMIT #{effective_limit}"
         end
 
