@@ -18,7 +18,6 @@ require_relative "synapse/resources/schema_overview_resource"
 
 module Synapse
   class << self
-    attr_accessor :model_registry
     attr_writer :configuration
 
     def configuration
@@ -31,6 +30,12 @@ module Synapse
 
     def reset_configuration!
       @configuration = Configuration.new
+      @model_registry = nil
+    end
+
+    # Lazily discover models on first access
+    def model_registry
+      @model_registry || boot!
     end
 
     def boot!
@@ -44,8 +49,6 @@ module Synapse
     end
 
     def mount_in_rails(app, options = {})
-      boot! unless model_registry
-
       opts = {
         name: "synapse",
         version: Synapse::VERSION,
