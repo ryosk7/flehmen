@@ -4,7 +4,7 @@ require "json"
 
 module Flehmen
   module Tools
-    class ListModelsTool < FastMcp::Tool
+    class ListModelsTool < Base
       tool_name "flehmen_list_models"
       description "List all available ActiveRecord models with their table names, column counts, and association counts"
 
@@ -13,7 +13,7 @@ module Flehmen
         open_world_hint: false
       )
 
-      def call(**_args)
+      def execute(**_args)
         registry = Flehmen.model_registry
         models = registry.model_names.map do |name|
           info = registry.find_model(name)

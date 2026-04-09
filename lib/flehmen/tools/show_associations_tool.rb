@@ -4,7 +4,7 @@ require "json"
 
 module Flehmen
   module Tools
-    class ShowAssociationsTool < FastMcp::Tool
+    class ShowAssociationsTool < Base
       tool_name "flehmen_show_associations"
       description "Navigate a record's associations. Given a model, record ID, and association name, returns the associated records."
 
@@ -21,7 +21,7 @@ module Flehmen
         open_world_hint: false
       )
 
-      def call(model_name:, id:, association_name:, limit: nil, offset: nil)
+      def execute(model_name:, id:, association_name:, limit: nil, offset: nil)
         info = Flehmen.model_registry.find_model(model_name)
         return JSON.generate({ error: "Model not found: #{model_name}" }) unless info
 

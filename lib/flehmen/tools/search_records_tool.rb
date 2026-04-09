@@ -4,7 +4,7 @@ require "json"
 
 module Flehmen
   module Tools
-    class SearchRecordsTool < FastMcp::Tool
+    class SearchRecordsTool < Base
       tool_name "flehmen_search_records"
       description 'Search records with filter conditions. Each condition has a field, operator (eq, not_eq, gt, gte, lt, lte, like, in, null, not_null), and value. Example conditions: [{"field":"status","operator":"eq","value":"active"}]'
 
@@ -22,7 +22,7 @@ module Flehmen
         open_world_hint: false
       )
 
-      def call(model_name:, conditions: nil, order_by: nil, order_dir: "asc", limit: nil, offset: nil)
+      def execute(model_name:, conditions: nil, order_by: nil, order_dir: "asc", limit: nil, offset: nil)
         info = Flehmen.model_registry.find_model(model_name)
         return JSON.generate({ error: "Model not found: #{model_name}" }) unless info
 

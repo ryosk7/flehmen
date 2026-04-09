@@ -4,7 +4,7 @@ require "json"
 
 module Flehmen
   module Tools
-    class CountRecordsTool < FastMcp::Tool
+    class CountRecordsTool < Base
       tool_name "flehmen_count_records"
       description 'Count records matching filter conditions. Example conditions: [{"field":"status","operator":"eq","value":"active"}]'
 
@@ -18,7 +18,7 @@ module Flehmen
         open_world_hint: false
       )
 
-      def call(model_name:, conditions: nil)
+      def execute(model_name:, conditions: nil)
         info = Flehmen.model_registry.find_model(model_name)
         return JSON.generate({ error: "Model not found: #{model_name}" }) unless info
 

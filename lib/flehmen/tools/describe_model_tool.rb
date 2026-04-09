@@ -4,7 +4,7 @@ require "json"
 
 module Flehmen
   module Tools
-    class DescribeModelTool < FastMcp::Tool
+    class DescribeModelTool < Base
       tool_name "flehmen_describe_model"
       description "Show the full schema for a model: columns (name, type, null, default), associations (name, type, target class), and enum definitions"
 
@@ -17,7 +17,7 @@ module Flehmen
         open_world_hint: false
       )
 
-      def call(model_name:)
+      def execute(model_name:)
         info = Flehmen.model_registry.find_model(model_name)
         return JSON.generate({ error: "Model not found: #{model_name}" }) unless info
 

@@ -4,7 +4,7 @@ require "json"
 
 module Flehmen
   module Tools
-    class FindRecordTool < FastMcp::Tool
+    class FindRecordTool < Base
       tool_name "flehmen_find_record"
       description "Find a single record by its primary key (usually ID)"
 
@@ -18,7 +18,7 @@ module Flehmen
         open_world_hint: false
       )
 
-      def call(model_name:, id:)
+      def execute(model_name:, id:)
         info = Flehmen.model_registry.find_model(model_name)
         return JSON.generate({ error: "Model not found: #{model_name}" }) unless info
 

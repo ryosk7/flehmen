@@ -4,7 +4,7 @@ require "json"
 
 module Flehmen
   module Tools
-    class ExecuteQueryTool < FastMcp::Tool
+    class ExecuteQueryTool < Base
       tool_name "flehmen_execute_query"
       description "Execute a read-only SQL SELECT query. Only available if enabled in configuration. Only SELECT statements are allowed."
 
@@ -24,7 +24,7 @@ module Flehmen
         open_world_hint: false
       )
 
-      def call(sql:, limit: nil)
+      def execute(sql:, limit: nil)
         unless Flehmen.configuration.enable_raw_sql
           return JSON.generate({ error: "Raw SQL execution is disabled. Set config.enable_raw_sql = true to enable." })
         end
@@ -48,9 +48,7 @@ module Flehmen
           normalized = "#{normalized} LIMIT #{effective_limit}"
         end
 
-        result = ActiveRecord::Base.while_preventing_writes(Flehmen.configuration.read_only_connection) do
-          ActiveRecord::Base.connection.exec_query(normalized)
-        end
+        result = ActiveRecord::Base.connection.exec_query(normalized)
 
         filter = Flehmen::FieldFilter.new
         rows = result.to_a.map do |row|
