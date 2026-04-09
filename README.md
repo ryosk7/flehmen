@@ -1,5 +1,7 @@
 # Flehmen
 
+<img width="410" height="410" alt="flehmen-response-cat" src="https://github.com/user-attachments/assets/07d5848a-d35f-4046-9530-69c855cfd07e" />
+
 A Ruby gem that exposes Rails ActiveRecord models to Claude Desktop via the Model Context Protocol (MCP). It auto-discovers models, provides read-only query tools, and filters sensitive fields.
 
 ## Installation
@@ -51,23 +53,6 @@ Add to `claude_desktop_config.json`:
 ```
 
 > **Note:** The URL must end with `/mcp/sse`. The underlying `fast_mcp` gem uses SSE transport, so `/mcp` alone will return 404.
-
-### Claude Code
-
-Add to `.mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "flehmen": {
-      "type": "sse",
-      "url": "http://localhost:3000/mcp/sse"
-    }
-  }
-}
-```
-
-Replace `localhost:3000` with your service URL in production.
 
 ## Configuration
 
