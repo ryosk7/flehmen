@@ -39,11 +39,38 @@ module Synapse
     end
 
     def start_server!
+      server = build_server
+      server.start
+    end
+
+    def mount_in_rails(app, options = {})
+      boot! unless model_registry
+
+      opts = {
+        name: "synapse",
+        version: Synapse::VERSION,
+        path_prefix: options.delete(:path_prefix) || "/mcp"
+      }.merge(options)
+
+      FastMcp.mount_in_rails(app, opts) do |server|
+        register_tools(server)
+        register_resources(server)
+      end
+    end
+
+    private
+
+    def build_server
       server = FastMcp::Server.new(
         name: "synapse",
         version: Synapse::VERSION
       )
+      register_tools(server)
+      register_resources(server)
+      server
+    end
 
+    def register_tools(server)
       server.register_tool(Tools::ListModelsTool)
       server.register_tool(Tools::DescribeModelTool)
       server.register_tool(Tools::FindRecordTool)
@@ -51,10 +78,10 @@ module Synapse
       server.register_tool(Tools::CountRecordsTool)
       server.register_tool(Tools::ShowAssociationsTool)
       server.register_tool(Tools::ExecuteQueryTool) if configuration.enable_raw_sql
+    end
 
+    def register_resources(server)
       server.register_resource(Resources::SchemaOverviewResource)
-
-      server.start
     end
   end
 end
