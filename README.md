@@ -79,6 +79,7 @@ Replace `localhost:3000` with your service URL in production.
 | `model_sensitive_fields` | `Hash` | `{}` | Per-model sensitive fields |
 | `max_results` | `Integer` | `100` | Maximum records returned by any query |
 | `enable_raw_sql` | `Boolean` | `false` | Enables the `execute_query` tool when `true` |
+| `read_only_connection` | `Boolean` | `true` | Wraps all queries in `while_preventing_writes` to block accidental writes at the Rails level |
 
 ### Default sensitive fields
 
@@ -206,9 +207,11 @@ Arguments:
 
 Security constraints:
 - Only `SELECT` statements are allowed
-- `INSERT`, `UPDATE`, `DELETE`, `DROP`, etc. are blocked
+- `INSERT`, `UPDATE`, `DELETE`, `DROP`, `INTO`, `COPY`, `LOAD`, `PRAGMA`, etc. are blocked
 - SQL comments are stripped
-- `LIMIT` is auto-appended if missing
+- `LIMIT` is enforced and capped by `max_results` even if specified in the query
+
+> **Note:** `enable_raw_sql` is disabled by default. Enable only in trusted environments.
 
 ## Resources
 
