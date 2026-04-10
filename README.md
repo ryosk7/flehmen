@@ -24,7 +24,8 @@ Flehmen.configure do |config|
   config.sensitive_fields = %i[
     password_digest encrypted_password token secret
     api_key api_secret access_token refresh_token
-    otp_secret reset_password_token encrypted_phone
+    otp_secret reset_password_token confirmation_token
+    unlock_token remember_token authentication_token
   ]
   config.max_results = 100
 end
