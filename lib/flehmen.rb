@@ -49,7 +49,10 @@ module Flehmen
       server.start
     end
 
-    def mount_in_rails(app, options = {})
+    # NOTE: This is the main entry point for mounting Flehmen as Rack middleware
+    # in a Rails application. Call this in your Rails initializer to register
+    # all MCP tools and resources with the FastMcp transport layer.
+    def catloaf(app, options = {})
       configuration.validate!
 
       opts = {

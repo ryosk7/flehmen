@@ -33,7 +33,7 @@ Flehmen.configure do |config|
   config.max_results = 100
 end
 
-Flehmen.mount_in_rails(Rails.application, path_prefix: "/mcp", localhost_only: false)
+Flehmen.catloaf(Rails.application, path_prefix: "/mcp", localhost_only: false)
 ```
 
 ### Claude Desktop
@@ -79,7 +79,7 @@ Flehmen.configure do |config|
   config.auth_token = ENV['MCP_AUTH_TOKEN']
 end
 
-Flehmen.mount_in_rails(Rails.application, path_prefix: "/mcp")
+Flehmen.catloaf(Rails.application, path_prefix: "/mcp")
 ```
 
 ### Mode 2: Custom authentication callback
@@ -234,7 +234,7 @@ Returns a JSON overview of all models including columns, associations, and enums
 ## Architecture
 
 ```
-Flehmen.mount_in_rails(app)
+Flehmen.catloaf(app)
   └── FastMcp.mount_in_rails (Rack middleware)
         ├── GET  /mcp/sse       → SSE connection (keep-alive)
         └── POST /mcp/messages  → JSON-RPC message handling
